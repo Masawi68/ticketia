@@ -19,9 +19,9 @@ ON DELETE CASCADE;
 CREATE TABLE comments (
   id SERIAL PRIMARY KEY,           -- Unique identifier for each comment
   comment TEXT NOT NULL,           -- The actual comment text
-  ticket_id INTEGER NOT NULL,      -- Reference to the associated ticket
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp for when the comment was created
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Timestamp for when the comment was last updated
+  ticket_id VARCHAR(20) NOT NULL,  -- Reference to the associated ticket
   CONSTRAINT fk_ticket FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE
 );
 
@@ -36,15 +36,17 @@ CREATE TABLE tickets (
     assign VARCHAR(100),               -- Assigned user's name
     priority VARCHAR(50) NOT NULL,     -- Priority level (e.g., Low, Medium, High)
     requester VARCHAR(100) NOT NULL,   -- Requester's name
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp of ticket creation
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp of ticket creation
+    status VARCHAR(20)                 -- Status of the ticket (e.g., Open, Closed, In Progress)
 );
+
 
 
 --Users Table
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
+    password TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

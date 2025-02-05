@@ -33,7 +33,7 @@ const Footer = () => {
           )}
         </div> */}
       </div>
-      <p className='text-center text-xl text-white'>&copy; copyright 2024 Ticketia</p>
+      <p className='text-center text-xl text-white'>&copy; copyright 2025 Ticketia</p>
       {/* <LoginModal isOpen={isModalOpen} toggleModal={toggleModal} onLogin={() => setIsLoggedIn(true)} /> */}
     </div>
   );

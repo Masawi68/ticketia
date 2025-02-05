@@ -27,7 +27,7 @@ const TicketUpdate = () => {
             // Fetch ticket details based on ticketId
             const fetchTicketData = async () => {
                 try {
-                    const ticketResponse = await fetch(`http://localhost:3000/tickets/${ticketId}`);
+                    const ticketResponse = await fetch(`https://ticketia-backend.onrender.com/tickets/${ticketId}`);
                     const ticketData = await ticketResponse.json();
                     if (ticketData) {
                         setId(ticketData.id)
@@ -41,7 +41,7 @@ const TicketUpdate = () => {
                     }
 
                     // Fetch comments associated with the ticket
-                    const commentsResponse = await fetch(`http://localhost:3000/comments/${ticketId}`);
+                    const commentsResponse = await fetch(`https://ticketia-backend.onrender.com/comments/${ticketId}`);
                     const commentsData = await commentsResponse.json();
                     setComments(commentsData);
                 } catch (error) {
@@ -80,7 +80,7 @@ const TicketUpdate = () => {
                     return;
                 }
     
-                const response = await fetch('http://localhost:3000/comments', {
+                const response = await fetch('https://ticketia-backend.onrender.com/comments', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ const TicketUpdate = () => {
                 const data = await response.json();
                 if (response.ok) {
                     // Fetch updated comments after posting
-                    const updatedResponse = await fetch(`http://localhost:3000/comments/${ticketId}`);
+                    const updatedResponse = await fetch(`https://ticketia-backend.onrender.com/comments/${ticketId}`);
                     const updatedData = await updatedResponse.json();
                     setComments(updatedData);
                 } else {
@@ -153,7 +153,7 @@ const TicketUpdate = () => {
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:3000/tickets/${location.state?.ticketId}`, {
+            const response = await fetch(`https://ticketia-backend.onrender.com/tickets/${location.state?.ticketId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -192,7 +192,7 @@ const TicketUpdate = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/comments/${id}`, {
+            const response = await fetch(`https://ticketia-backend.onrender.com/comments/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -221,7 +221,7 @@ const TicketUpdate = () => {
     const handleDeleteClick = async (id) => {
         console.log('Deleting comment with id:', id); // Check that id is defined
         try {
-            const response = await fetch(`http://localhost:3000/comments/${id}`, {
+            const response = await fetch(`https://ticketia-backend.onrender.com/comments/${id}`, {
                 method: 'DELETE',
             });
 

@@ -32,7 +32,7 @@ const DashBoard = () => {
 
   const fetchTickets = async () => {
     try {
-      const response = await fetch('http://localhost:3000/tickets'); // Replace with your backend API URL
+      const response = await fetch('https://ticketia-backend.onrender.com/tickets'); // Replace with your backend API URL
       const data = await response.json();
       setTickets(data);
     } catch (error) {
@@ -70,7 +70,7 @@ const DashBoard = () => {
   const handleDeleteConfirm = async () => {
     if (ticketToDelete) {
       try {
-        const response = await fetch(`http://localhost:3000/tickets/${ticketToDelete}`, {
+        const response = await fetch(`https://ticketia-backend.onrender.com/tickets/${ticketToDelete}`, {
           method: 'DELETE',
         });
 
@@ -100,7 +100,7 @@ const DashBoard = () => {
   
     try {
       for (const ticket of selectedTickets) {
-        const response = await fetch(`http://localhost:3000/tickets/${ticket.id}`, {
+        const response = await fetch(`https://ticketia-backend.onrender.com/tickets/${ticket.id}`, {
           method: 'DELETE',
         });
   
