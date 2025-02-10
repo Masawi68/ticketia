@@ -13,26 +13,12 @@ const DashBoard = () => {
   const [showModal, setShowModal] = useState(false);
   const [ticketToDelete, setTicketToDelete] = useState(null);
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1); // Track the current page
-  const ticketsPerPage = 10; // Define tickets per page
-
-  /* useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/tickets');  // Make sure to match your backend API URL
-        const data = await response.json();
-        setTickets(data);
-      } catch (error) {
-        console.error("Error fetching tickets:", error);
-      }
-    };
-
-    fetchTickets();
-  }, []); */
+  const [currentPage, setCurrentPage] = useState(1); 
+  const ticketsPerPage = 10; 
 
   const fetchTickets = async () => {
     try {
-      const response = await fetch('https://ticketia-backend.onrender.com/tickets'); // Replace with your backend API URL
+      const response = await fetch('https://ticketia-backend.onrender.com/tickets');
       const data = await response.json();
       setTickets(data);
     } catch (error) {
@@ -44,12 +30,10 @@ const DashBoard = () => {
     fetchTickets();
   }, []);
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // Filter tickets based on search query
   const filteredTickets = tickets.filter((ticket) => {
     const matchesSearch = ticket.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ticket.assign.toLowerCase().includes(searchQuery.toLowerCase());
@@ -60,11 +44,9 @@ const DashBoard = () => {
     return matchesSearch && matchesCategory && matchesPriority;
   });
 
-
-  // Handle delete action
   const handleDeleteClick = (id) => {
-    setTicketToDelete(id); // Set the ticket to delete
-    setShowModal(true); // Show the modal
+    setTicketToDelete(id);
+    setShowModal(true); 
   };
 
   const handleDeleteConfirm = async () => {
@@ -109,7 +91,6 @@ const DashBoard = () => {
         }
       }
   
-      // Remove deleted tickets from state
       setTickets(tickets.filter(ticket => !ticket.checked));
       setSelectedCount(0);
     } catch (error) {
@@ -120,14 +101,13 @@ const DashBoard = () => {
 
 
   const handleDeleteCancel = () => {
-    setTicketToDelete(null); // Clear the ticket to delete
-    setShowModal(false); // Hide the modal
+    setTicketToDelete(null); 
+    setShowModal(false); 
   };
 
 
   const [selectedCount, setSelectedCount] = useState(0);
 
-  // Handle checkbox change
   const handleCheckboxChange = (id) => {
     setTickets((prevTickets) =>
       prevTickets.map((ticket) =>
@@ -144,7 +124,7 @@ const DashBoard = () => {
 
   const handleCategoryClick = (category) => {
     if (selectedCategory === category) {
-      setSelectedCategory('');  // Deselect category if it's already selected
+      setSelectedCategory(''); 
     } else {
       setSelectedCategory(category);
     }
@@ -152,7 +132,7 @@ const DashBoard = () => {
 
   const handlePriorityClick = (priority) => {
     if (selectedPriority === priority) {
-      setSelectedPriority('');  // Deselect priority if it's already selected
+      setSelectedPriority(''); 
     } else {
       setSelectedPriority(priority);
     }
@@ -166,7 +146,6 @@ const DashBoard = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // Function to calculate expected date by adding 5 days to the created date
   const calculateExpectedDate = (createdDate) => {
     const created = new Date(createdDate);
     created.setDate(created.getDate() + 5);
@@ -182,9 +161,9 @@ const DashBoard = () => {
   };
 
   const sortedTickets = filteredTickets.sort((a, b) => {
-    const idA = parseInt(a.id.split('-')[1], 10);  // Extract and convert the numeric part of the id
-    const idB = parseInt(b.id.split('-')[1], 10);  // Extract and convert the numeric part of the id
-    return idA - idB;  // Sort in ascending order (T-00001, T-00002, ...)
+    const idA = parseInt(a.id.split('-')[1], 10); 
+    const idB = parseInt(b.id.split('-')[1], 10); 
+    return idA - idB; 
   });
 
   const indexOfLastTicket = currentPage * ticketsPerPage;
@@ -201,12 +180,11 @@ const DashBoard = () => {
   };
 
   const handleRefresh = () => {
-    fetchTickets(); // Refetch tickets
+    fetchTickets();
   };
 
   return (
     <div className="min-h-[90vh] flex text-white">
-      {/* Sidebar */}
       <div className="flex">
         <aside className="w-64 bg-gradient-to-b from-[#010518] to-[#0132F9] p-8">
           <button className="bg-white hover:bg-blue-600 text-blue-950 w-[120px] hover:text-white py-2 rounded-2xl mb-4 mx-10" onClick={handleNewTicketClick}><strong>+ New</strong></button>
@@ -216,7 +194,7 @@ const DashBoard = () => {
             <ul>
               {['Hardware', 'Software', 'Network', 'Security', 'Access Required'].map((category) => {
                 const colors = {
-                  Hardware: 'bg-blue-500', // Adjust based on your desired shade
+                  Hardware: 'bg-blue-500',
                   Software: 'bg-green-500',
                   Network: 'bg-purple-500',
                   Security: 'bg-red-500',
@@ -248,7 +226,7 @@ const DashBoard = () => {
             <ul>
               {['Low', 'Medium', 'High', 'Critical'].map((priority) => {
                 const colors = {
-                  Low: 'bg-green-500', // Adjust based on your desired shade
+                  Low: 'bg-green-500',
                   Medium: 'bg-[#FFFF00]',
                   High: 'bg-orange-500',
                   Critical: 'bg-[#FB0000]',
@@ -299,7 +277,6 @@ const DashBoard = () => {
           </div>
         </header>
 
-        {/* Ticket Table */}
         <div className="p-6">
           <table className="min-w-full table-auto text-gray-700">
             <thead className="bg-[#C3D3F5] text-black">
@@ -327,21 +304,20 @@ const DashBoard = () => {
                   <td className="px-6 py-3">
                     <div className="flex items-center space-x-4">
 
-                      {/* Update Button */}
                       <button
                         onClick={() => handleUpdateClick(ticket.id)}
                         className="text-blue-500 hover:text-blue-800"
                       >
                         <FontAwesomeIcon icon={faPen} />
                       </button>
-                      {/* Delete Button */}
+                    
                       <button
                         onClick={() => handleDeleteClick(ticket.id)}
                         className="text-blue-950 hover:text-[#FB0000]"
                       >
                         <FontAwesomeIcon icon={faTrashAlt} />
                       </button>
-                      {/* Checkbox */}
+                     
                       <input
                         type="checkbox"
                         checked={ticket.checked || false}
@@ -359,29 +335,6 @@ const DashBoard = () => {
         <div className=" flex justify-center items-center text-black">{selectedCount} Selected /<span className="text-black ml-1">
               Page {currentPage} of {totalPages}
             </span></div>
-
-        {/* Pagination Controls */}
-        {/*  <div className="flex justify-center items-center space-x-4 mt-4">
-          <button
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-            className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-400"
-          >
-            Previous
-          </button>
-          <span className="text-black">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-            className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-400"
-          >
-            Next
-          </button>
-        </div> */}
-
-
         {showModal && (
           <YesNo
             message="Are you sure you want to delete this ticket?"
@@ -389,11 +342,9 @@ const DashBoard = () => {
             onCancel={handleDeleteCancel}
           />
         )}
-
-        {/* Footer */}
         <footer>
           <div className="flex justify-between items-center px-4">
-            {/* <div className="text-black">{selectedCount} Selected</div> */}
+            
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
@@ -402,9 +353,6 @@ const DashBoard = () => {
               Previous
             </button>
             <TakeaBreak />
-            {/* <button className="bg-[#010518] text-white px-4 py-2 rounded-lg">
-              Next
-            </button> */}
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}

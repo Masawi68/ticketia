@@ -2,32 +2,32 @@ import React, { useState } from 'react';
 import { assets } from '../assets/assets';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRightToBracket, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Added logout icon
+import { faRightToBracket, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; 
 import LoginModal from './LoginModal';
-import LogoutYesNo from './LogoutYesNo'; // Import the confirmation modal
+import LogoutYesNo from './LogoutYesNo'; 
 
 const Navbar = () => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
-  const [showLogoutModal, setShowLogoutModal] = useState(false); // State to show logout confirmation modal
-  const navigate = useNavigate(); // Initialize navigate hook
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const navigate = useNavigate(); 
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
 
   const handleLogout = () => {
-    setShowLogoutModal(true); // Show the logout confirmation modal
+    setShowLogoutModal(true); 
   };
 
   const handleLogoutConfirm = () => {
     setIsLoggedIn(false);
     setShowLogoutModal(false);
-    navigate('/'); // Redirect to the login page
+    navigate('/'); 
   };
 
   const handleLogoutCancel = () => {
-    setShowLogoutModal(false); // Close the confirmation modal
+    setShowLogoutModal(false); 
   };
 
   return (
@@ -47,10 +47,10 @@ const Navbar = () => {
           ) : (
             <>
               <div className="text-3xl text-gray-500 cursor-pointer">
-                <FontAwesomeIcon icon={faUser} /> {/* User icon when logged in */}
+                <FontAwesomeIcon icon={faUser} />
               </div>
               <div className="text-3xl text-gray-500 cursor-pointer" onClick={handleLogout}>
-                <FontAwesomeIcon icon={faSignOutAlt} /> {/* Logout icon */}
+                <FontAwesomeIcon icon={faSignOutAlt} />
               </div>
             </>
           )}

@@ -21,7 +21,6 @@ const LoginModal = ({ isOpen, toggleModal, onLogin }) => {
     e.preventDefault();
 
     if (isResetPassword) {
-      // Handle password reset logic
       console.log('Reset Password:', formData.email);
       return;
     }
@@ -42,13 +41,9 @@ const LoginModal = ({ isOpen, toggleModal, onLogin }) => {
       const data = await response.json();
       console.log('Login Successful:', data);
 
-      
-        // Save token to localStorage (optional)
         localStorage.setItem('token', data.token);
-      // Update parent login state
       onLogin(true);
 
-      // Close modal
       toggleModal();
 
       navigate('./dashboard');
@@ -59,8 +54,8 @@ const LoginModal = ({ isOpen, toggleModal, onLogin }) => {
   };
 
   const handleClose = () => {
-    setError(null); // Clear errors on close
-    setIsResetPassword(false); // Reset to login modal
+    setError(null); 
+    setIsResetPassword(false); 
     toggleModal();
   };
 
@@ -143,9 +138,6 @@ const LoginModal = ({ isOpen, toggleModal, onLogin }) => {
               <button type="submit" className="px-20 py-2 text-white bg-blue-950 rounded hover:bg-blue-700">
                 Login
               </button>
-              {/* <NavLink to="#" className="text-blue-950 hover:underline" onClick={() => setIsResetPassword(true)}>
-                Forgot password?
-              </NavLink> */}
             </div>
           </form>
         )}

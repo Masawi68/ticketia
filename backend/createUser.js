@@ -1,21 +1,10 @@
-import pkg from 'pg'; // Import the entire 'pg' module
+import pkg from 'pg';
 const { Pool } = pkg;
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
 
-// PostgreSQL Client Setup
-/* const pool = new Pool({
-  host: process.env.DB_HOST, // localhost
-  port: process.env.DB_PORT, // 5432
-  user: process.env.DB_USER, // postgres
-  password: process.env.DB_PASSWORD, // Your password here
-  database: process.env.DB_NAME, // Your database name here
-});
- */
-
 const connectionString = process.env.DB_URL;
 
-// Create a connection pool
   const pool = new Pool({
     connectionString: connectionString,
     ssl: {

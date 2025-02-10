@@ -6,16 +6,15 @@ import DashBoard from './pages/DashBoard';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import TicketUpdate from './pages/TicketUpdate';
-import PrivateRoute from './components/PrivateRoute'; // Import the PrivateRoute component
+import PrivateRoute from './components/PrivateRoute'; 
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Check if a token exists in localStorage
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setIsLoggedIn(true); // Set login state based on token presence
+      setIsLoggedIn(true); 
     }
   }, []);
 
@@ -23,10 +22,10 @@ const App = () => {
     <div>
       <Navbar />
       <Routes>
-        {/* Public route for Login */}
+      
         <Route path="/" element={<Login />} />
         
-        {/* Protected routes */}
+       
         <Route 
           path="/ticketCreate" 
           element={<PrivateRoute isLoggedIn={isLoggedIn} element={<TicketCreate />} />} 
@@ -35,10 +34,7 @@ const App = () => {
           path="/ticketUpdate" 
           element={<PrivateRoute isLoggedIn={isLoggedIn} element={<TicketUpdate />} />} 
         />
-        {/* <Route 
-          path="/TicketUpdate/:ticketId" 
-          element={<PrivateRoute isLoggedIn={isLoggedIn} element={<TicketUpdate />} />} 
-        /> */}
+       
         <Route 
           path="/dashboard" 
           element={<PrivateRoute isLoggedIn={isLoggedIn} element={<DashBoard />} />} 

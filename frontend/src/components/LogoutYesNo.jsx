@@ -3,12 +3,12 @@ import React from 'react';
 const LogoutYesNo = ({ onConfirm, onCancel }) => {
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50" // Ensure z-index is high enough
-      onClick={onCancel} // Close modal if clicking outside of the modal box
+      className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50" 
+      onClick={onCancel} 
     >
       <div
         className="bg-white p-6 px-[60px] rounded-lg shadow-lg text-center"
-        onClick={(e) => e.stopPropagation()} // Prevent click on the modal box from closing it
+        onClick={(e) => e.stopPropagation()} 
       >
         <p className="text-2xl text-blue-950 font-semibold mb-6">
           Are you sure<br />you want to log out?

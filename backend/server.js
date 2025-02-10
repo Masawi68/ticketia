@@ -1,58 +1,41 @@
 import express from 'express';
 import cors from 'cors';
-import pkg from 'pg'; // Import the entire 'pg' module
+import pkg from 'pg'; 
 const { Pool } = pkg; 
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 
-
-// App Config
 const app = express();
 const port = process.env.PORT || 3000;
 const secretKey = process.env.JWT_SECRET || 'your-secret-key'; 
-const SECRET_KEY = "your_jwt_secret"; // Use a secure key in production
-
-
-// PostgreSQL Client Setup
-/* const pool = new Pool({
-  host: process.env.DB_HOST, // localhost
-  port: process.env.DB_PORT, // 5432
-  user: process.env.DB_USER, // postgres
-  password: process.env.DB_PASSWORD, // Your password here
-  database: process.env.DB_NAME, // Your database name here
-}); */
-
+const SECRET_KEY = "your_jwt_secret"; 
 const connectionString = process.env.DB_URL;
 
-// Create a connection pool
-  const pool = new Pool({
-    connectionString: connectionString,
-    ssl: {
-      rejectUnauthorized: false
+const pool = new Pool({
+  connectionString: connectionString,
+  ssl: {
+    rejectUnauthorized: false
   }
 }); 
 
 pool.connect();
 
-// Middleware
 app.use(express.json());
 app.use(cors());
-
-// API Endpoints
 app.get('/', (req, res) => {
   res.send("API Working");
 });
 
-// Post Comment Endpoint
+
 app.post('/comments', async (req, res) => {
   const { comment, ticket_id } = req.body;
 
   try {
     const result = await pool.query(
       'INSERT INTO comments (comment, ticket_id) VALUES ($1, $2) RETURNING *',
-      [comment, ticket_id || null] // Allow null for ticket_id
+      [comment, ticket_id || null] 
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -69,7 +52,7 @@ app.get('/comments', async (req, res) => {
        FROM comments 
        WHERE ticket_id IS NULL`
     );
-    res.json(result.rows); // Sends only unattached comments as JSON
+    res.json(result.rows); 
   } catch (error) {
     console.error('Error retrieving comments:', error);
     res.status(500).send('Error retrieving comments');
@@ -77,8 +60,6 @@ app.get('/comments', async (req, res) => {
 });
 
 
-
-// Update Comment Endpoint
 app.put('/comments/:id', async (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
@@ -99,8 +80,7 @@ app.put('/comments/:id', async (req, res) => {
   }
 });
   
- 
-// Delete Comment Endpoint
+
 app.delete('/comments/:id', async (req, res) => {
     const id = parseInt(req.params.id, 10);
   
@@ -146,7 +126,6 @@ app.post('/tickets', async (req, res) => {
       [nextId, title, description, category, assign, priority, requester, 'New']
     );
 
-    // Update comments with ticket ID
     if (comments && comments.length > 0) {
       const updateCommentQueries = comments.map((comment) =>
         pool.query('UPDATE comments SET ticket_id = $1 WHERE id = $2', [nextId, comment.id])
@@ -161,11 +140,10 @@ app.post('/tickets', async (req, res) => {
   }
 });
 
-// Get all tickets endpoint
 app.get('/tickets', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM tickets ORDER BY created_at DESC');
-    res.json(result.rows); // Sends the tickets as JSON
+    res.json(result.rows); 
   } catch (error) {
     console.error(error);
     res.status(500).send('Error retrieving tickets');
@@ -178,7 +156,6 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Check if the email exists in the database
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     const user = result.rows[0];
 
@@ -187,7 +164,6 @@ app.post('/login', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Compare the provided password with the hashed password in the database
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -195,7 +171,6 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token
     const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
     res.status(200).json({ token, message: 'Login successful' });
   } catch (err) {
@@ -204,42 +179,31 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Delete Ticket Endpoint
 app.delete('/tickets/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Begin a transaction to ensure atomicity
     await pool.query('BEGIN');
 
-    // Delete associated comments
     await pool.query('DELETE FROM comments WHERE ticket_id = $1', [id]);
 
-    // Delete the ticket
     const result = await pool.query('DELETE FROM tickets WHERE id = $1 RETURNING *', [id]);
 
     if (result.rows.length > 0) {
-      // Commit the transaction
+     
       await pool.query('COMMIT');
       res.status(200).json({ message: 'Ticket and associated comments deleted successfully' });
     } else {
-      // Rollback the transaction if no ticket was found
       await pool.query('ROLLBACK');
       res.status(404).json({ error: 'Ticket not found' });
     }
   } catch (error) {
-    // Rollback the transaction in case of any error
     await pool.query('ROLLBACK');
     console.error('Error deleting ticket:', error);
     res.status(500).json({ error: 'Failed to delete ticket' });
   }
 });
 
-
-
-
-
-// Route to fetch a single ticket by its ID
  app.get('/tickets/:ticketId', async (req, res) => {
   const { ticketId } = req.params;
   try {
@@ -265,8 +229,6 @@ app.put('/tickets/:ticketId', async (req, res) => {
     if (ticketResult.rows.length === 0) {
       return res.status(404).json({ error: 'Ticket not found' });
     }
-
-    // Update the ticket with the new values, including status
     const updateResult = await pool.query(
       `UPDATE tickets SET title = $1, description = $2, category = $3, assign = $4, priority = $5, requester = $6, status = $7
        WHERE id = $8 RETURNING *`,

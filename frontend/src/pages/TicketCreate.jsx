@@ -32,13 +32,12 @@ const TicketCreate = () => {
       };
   
       fetchComments();
-    }, []); // Empty dependency array means this effect runs only once when the component mounts
-    
+    }, []); 
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (newComment.trim()) {
-      console.log('Submitting comment:', newComment); // Add this line for debugging
+      console.log('Submitting comment:', newComment); 
       try {
         const response = await fetch('https://ticketia-backend.onrender.com/comments', {
           method: 'POST',
@@ -52,7 +51,7 @@ const TicketCreate = () => {
 
         const data = await response.json();
         if (response.ok) {
-          // Fetch updated comments after posting
+        
           const updatedResponse = await fetch('https://ticketia-backend.onrender.com/comments');
           const updatedData = await updatedResponse.json();
           setComments(updatedData);
@@ -83,15 +82,6 @@ const TicketCreate = () => {
     "Critical": "bg-[#FB0000]",
   };
 
-
-  /* const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (newComment.trim()) {
-      setComments([...comments, newComment]);
-      setNewComment("");
-    }
-  }; */
-
   const handleCancel = () => {
     setNewComment("");
     setEditingIndex(null);
@@ -101,12 +91,12 @@ const TicketCreate = () => {
   const handleEditClick = (id) => {
     setEditingIndex(id);
     const commentToEdit = comments.find(comment => comment.id === id);
-    setEditingComment(commentToEdit.comment); // Set the content to edit
+    setEditingComment(commentToEdit.comment); 
   };
   
   
   const handleEditSubmit = async (e, id) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault(); 
     
     if (!editingComment.trim()) {
       alert("Comment cannot be empty");
@@ -127,8 +117,8 @@ const TicketCreate = () => {
           comment.id === id ? { ...comment, comment: editingComment } : comment
         );
         setComments(updatedComments);
-        setEditingIndex(null); // Reset editing index
-        setEditingComment(""); // Reset editing comment
+        setEditingIndex(null); 
+        setEditingComment(""); 
       } else {
         console.error('Failed to update comment');
         alert('Failed to update comment');
@@ -143,7 +133,7 @@ const TicketCreate = () => {
   
   
   const handleDeleteClick = async (id) => {
-    console.log('Deleting comment with id:', id); // Check that id is defined
+    console.log('Deleting comment with id:', id); 
     try {
       const response = await fetch(`https://ticketia-backend.onrender.com/comments/${id}`, {
         method: 'DELETE',
@@ -167,7 +157,7 @@ const TicketCreate = () => {
   
 
   const handleCreateSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault(); 
     
     if (title && description) {
       try {
@@ -181,7 +171,7 @@ const TicketCreate = () => {
             assign,
             priority,
             requester,
-            comments: comments.filter(comment => !comment.ticket_id) // Only include comments without a ticket ID
+            comments: comments.filter(comment => !comment.ticket_id)
               .map(comment => ({ id: comment.id, text: comment.comment })),
           }),
         });
@@ -190,9 +180,9 @@ const TicketCreate = () => {
           const createdTicket = await response.json();
           alert(`Ticket created successfully! ID: ${createdTicket.id}`);
       
-          // Update comments only for this ticket
+          
           const updateCommentPromises = comments
-            .filter(comment => !comment.ticket_id) // Only update comments without a ticket ID
+            .filter(comment => !comment.ticket_id)
             .map(comment =>
               fetch(`https://ticketia-backend.onrender.com/comments/${comment.id}`, {
                 method: 'PUT',
@@ -204,14 +194,13 @@ const TicketCreate = () => {
             );
           await Promise.all(updateCommentPromises);
       
-          // Reset form fields
           setTitle('');
           setDescription('');
           setCategory('');
           setAssign('');
           setPriority('');
           setRequester('');
-          setComments([]); // Clear comments state
+          setComments([]); 
         } else {
           alert('Failed to create ticket');
         }
@@ -291,7 +280,7 @@ const TicketCreate = () => {
                   <div className='max-h-[180px] overflow-y-auto'>
                     <ul className="space-y-3">
                     {comments
-                      .filter((comment) => !comment.ticket_id) // Only include comments without a ticket_id
+                      .filter((comment) => !comment.ticket_id) 
                       .map((comment) => (
                         <li
                           key={comment.id}
@@ -354,7 +343,7 @@ const TicketCreate = () => {
                     categoryColors[category] || "bg-gray-200"
                   } hover:opacity-80  outline-none`}
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)} // Update state on selection
+                  onChange={(e) => setCategory(e.target.value)} 
                   style={{ border: "none" }}
                 >
                   <option>Category</option>
@@ -366,7 +355,7 @@ const TicketCreate = () => {
                 </select>
                 <select className="border rounded-md p-2 bg-[#721FD8] text-white focus:ring focus:ring-blue-200 focus:outline-none"
                  value={assign}
-                 onChange={(e) => setAssign(e.target.value)}> // Update state on selection
+                 onChange={(e) => setAssign(e.target.value)}> 
                   <option>Assign</option>
                   <option>John Doe</option>
                   <option>Jane Smith</option>
@@ -379,7 +368,7 @@ const TicketCreate = () => {
                     priorityColors[priority] || "bg-gray-200"
                   } hover:opacity-80  outline-none`}
                   value={priority}
-                  onChange={(e) => setPriority(e.target.value)} // Update state on selection
+                  onChange={(e) => setPriority(e.target.value)} 
                   style={{ border: "none" }}>
                   <option>Priority</option>
                   <option>Low</option>

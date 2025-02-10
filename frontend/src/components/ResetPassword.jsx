@@ -7,7 +7,6 @@ export const ResetPassword = ({ isOpen, toggleModal }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle reset password logic here
   };
 
   return (

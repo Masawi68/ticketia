@@ -24,7 +24,7 @@ const TicketUpdate = () => {
     useEffect(() => {
         const ticketId = location.state?.ticketId;
         if (ticketId) {
-            // Fetch ticket details based on ticketId
+            
             const fetchTicketData = async () => {
                 try {
                     const ticketResponse = await fetch(`https://ticketia-backend.onrender.com/tickets/${ticketId}`);
@@ -40,7 +40,7 @@ const TicketUpdate = () => {
                         setRequester(ticketData.requester);
                     }
 
-                    // Fetch comments associated with the ticket
+                    
                     const commentsResponse = await fetch(`https://ticketia-backend.onrender.com/comments/${ticketId}`);
                     const commentsData = await commentsResponse.json();
                     setComments(commentsData);
@@ -52,29 +52,12 @@ const TicketUpdate = () => {
             fetchTicketData();
         }
     }, [location.state?.ticketId]);
-
-    /* useEffect(() => {
-        const fetchComments = async () => {
-          try {
-            const response = await fetch('http://localhost:3000/comments');
-            const data = await response.json();
-            setComments(data);
-          } catch (error) {
-            console.error('Error fetching comments:', error);
-          }
-        };
-    
-        fetchComments();
-    }, []); // Empty dependency array means this effect runs only once when the component mounts */
-
-
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (newComment.trim()) {
-            console.log('Submitting comment:', newComment); // Debugging
-    
+            console.log('Submitting comment:', newComment); 
             try {
-                const ticketId = location.state?.ticketId; // Get ticketId from location state
+                const ticketId = location.state?.ticketId; 
                 if (!ticketId) {
                     alert('Ticket ID is missing');
                     return;
@@ -87,13 +70,13 @@ const TicketUpdate = () => {
                     },
                     body: JSON.stringify({
                         comment: newComment,
-                        ticket_id: ticketId, // Use the ticketId here
+                        ticket_id: ticketId, 
                     }),
                 });
     
                 const data = await response.json();
                 if (response.ok) {
-                    // Fetch updated comments after posting
+                   
                     const updatedResponse = await fetch(`https://ticketia-backend.onrender.com/comments/${ticketId}`);
                     const updatedData = await updatedResponse.json();
                     setComments(updatedData);
@@ -128,15 +111,6 @@ const TicketUpdate = () => {
         "Critical": "bg-[#FB0000]",
     };
 
-
-    /*  const handleCommentSubmit = (e) => {
-       e.preventDefault();
-       if (newComment.trim()) {
-         setComments([...comments, newComment]);
-         setNewComment("");
-       }
-     };  */
-
     const handleCancel = () => {
         setNewComment("");
         setEditingIndex(null);
@@ -146,7 +120,7 @@ const TicketUpdate = () => {
     const handleEditClick = (id) => {
         setEditingIndex(id);
         const commentToEdit = comments.find(comment => comment.id === id);
-        setEditingComment(commentToEdit.comment); // Set the content to edit
+        setEditingComment(commentToEdit.comment); 
     };
 
 
@@ -165,13 +139,13 @@ const TicketUpdate = () => {
                     priority,
                     requester,
                     status,
-                    comments, // You may want to send comments only if needed, or keep the existing ones
+                    comments, 
                 }),
             });
 
             if (response.ok) {
                 alert("Ticket updated successfully!");
-                navigate("/Dashboard"); // Redirect to dashboard after update
+                navigate("/Dashboard"); 
             } else {
                 alert("Failed to update ticket.");
             }
@@ -184,7 +158,7 @@ const TicketUpdate = () => {
 
 
     const handleEditSubmit = async (e, id) => {
-        e.preventDefault(); // Prevent form submission
+        e.preventDefault(); 
 
         if (!editingComment.trim()) {
             alert("Comment cannot be empty");
@@ -205,8 +179,8 @@ const TicketUpdate = () => {
                     comment.id === id ? { ...comment, comment: editingComment } : comment
                 );
                 setComments(updatedComments);
-                setEditingIndex(null); // Reset editing index
-                setEditingComment(""); // Reset editing comment
+                setEditingIndex(null); 
+                setEditingComment(""); 
             } else {
                 console.error('Failed to update comment');
                 alert('Failed to update comment');
@@ -219,7 +193,7 @@ const TicketUpdate = () => {
 
 
     const handleDeleteClick = async (id) => {
-        console.log('Deleting comment with id:', id); // Check that id is defined
+        console.log('Deleting comment with id:', id);
         try {
             const response = await fetch(`https://ticketia-backend.onrender.com/comments/${id}`, {
                 method: 'DELETE',
@@ -370,7 +344,7 @@ const TicketUpdate = () => {
                                 <select className={`w-full p-2 rounded-md text-black ${categoryColors[category] || "bg-gray-200"
                                     } hover:opacity-80  outline-none`}
                                     value={category}
-                                    onChange={(e) => setCategory(e.target.value)} // Update state on selection
+                                    onChange={(e) => setCategory(e.target.value)} 
                                     style={{ border: "none" }}
                                 >
                                     <option>Category</option>
@@ -382,7 +356,7 @@ const TicketUpdate = () => {
                                 </select>
                                 <select className="border rounded-md p-2 bg-[#721FD8] text-white focus:ring focus:ring-blue-200 focus:outline-none"
                                     value={assign}
-                                    onChange={(e) => setAssign(e.target.value)}> // Update state on selection
+                                    onChange={(e) => setAssign(e.target.value)}> 
                                     <option>Assign</option>
                                     <option>John Doe</option>
                                     <option>Jane Smith</option>
@@ -394,7 +368,7 @@ const TicketUpdate = () => {
                                 <select className={`w-full p-2 rounded-md text-black ${priorityColors[priority] || "bg-gray-200"
                                     } hover:opacity-80  outline-none`}
                                     value={priority}
-                                    onChange={(e) => setPriority(e.target.value)} // Update state on selection
+                                    onChange={(e) => setPriority(e.target.value)} 
                                     style={{ border: "none" }}>
                                     <option>Priority</option>
                                     <option>Low</option>
@@ -404,7 +378,7 @@ const TicketUpdate = () => {
                                 </select>
                                 <select className="border rounded-md p-2 text-black bg-[#C561FF] focus:ring focus:ring-blue-200 focus:outline-none"
                                     value={status}
-                                    onChange={(e) => setStatus(e.target.value)}> // Update state on selection
+                                    onChange={(e) => setStatus(e.target.value)}>
                                     <option>Status</option>
                                     <option>New</option>
                                     <option>In Progress</option>
@@ -413,7 +387,7 @@ const TicketUpdate = () => {
                                 </select>
                                 <select className="border rounded-md p-2 text-white bg-blue-700 focus:ring focus:ring-blue-200 focus:outline-none"
                                     value={requester}
-                                    onChange={(e) => setRequester(e.target.value)}> // Update state on selection
+                                    onChange={(e) => setRequester(e.target.value)}> 
                                     <option>Requester</option>
                                     <option>Tim</option>
                                     <option>Rita</option>
